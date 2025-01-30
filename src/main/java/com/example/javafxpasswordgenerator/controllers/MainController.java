@@ -1,27 +1,48 @@
 package com.example.javafxpasswordgenerator.controllers;
 
+import com.example.javafxpasswordgenerator.logic.Generator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class MainController {
+    public CheckBox upperCaseCheckBox;
+    public CheckBox lowerCaseCheckBox;
+    public CheckBox numbersCheckBox;
+    public CheckBox specialsCheckBox;
+    public CheckBox excludedChars;
+    private Generator generator;
+    @FXML
     public Button generatePasswordButton;
     @FXML
-    private Label welcomeText;
+    public TextField passwordTextField;
+    public Spinner<Integer> passwordLengthSpinner;
+    public Button copyButton;
+
     @FXML
-    private TextField passwordTextField;
+    public void initialize() {
+        generator = new Generator();
+        //passwordLengthSpinner = new Spinner<>();
+        passwordLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        setupBindings();
+    }
+
     @FXML
-    private Slider passwordLengthSlider;
+    private void setupBindings() {
+        upperCaseCheckBox.selectedProperty().bindBidirectional(generator.upperCaseFlagProperty());
+        lowerCaseCheckBox.selectedProperty().bindBidirectional(generator.lowerCaseFlagProperty());
+        numbersCheckBox.selectedProperty().bindBidirectional(generator.numbersFlagProperty());
+        specialsCheckBox.selectedProperty().bindBidirectional(generator.specialFlagProperty());
+        excludedChars.selectedProperty().bindBidirectional(generator.removeSimilarFlagProperty());
+        passwordLengthSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(oldValue)) {
+                generator.getPasswordLengthProperty().setValue(newValue);
+            }
+        });
+    }
 
     @FXML
     protected void onGeneratePasswordButtonClick() {
-        passwordLengthSlider.setMin(4);
-        passwordLengthSlider.setMax(100);
-        passwordLengthSlider.setShowTickLabels(true);
-        passwordTextField.setText(String.valueOf(passwordLengthSlider.getValue()));
+        passwordTextField.setText(generator.generatePassword());
     }
-
 
 }

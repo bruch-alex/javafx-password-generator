@@ -19,10 +19,11 @@ public class App extends Application {
         App.primaryStage = stage;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+        Scene scene = new Scene(fxmlLoader.load(), 400, 600);
 
         // apply saved theme
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
