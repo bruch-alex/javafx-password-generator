@@ -1,8 +1,16 @@
 package com.example.javafxpasswordgenerator.controllers;
 
-import com.example.javafxpasswordgenerator.logic.Generator;
+import com.example.javafxpasswordgenerator.logic.PasswordGenerator;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+
 
 public class MainController {
     public CheckBox upperCaseCheckBox;
@@ -10,39 +18,56 @@ public class MainController {
     public CheckBox numbersCheckBox;
     public CheckBox specialsCheckBox;
     public CheckBox excludedChars;
-    private Generator generator;
+    public Label passwordOutputLabel;
+    private PasswordGenerator passwordGenerator;
     @FXML
     public Button generatePasswordButton;
     @FXML
     public TextField passwordTextField;
     public Spinner<Integer> passwordLengthSpinner;
-    public Button copyButton;
+    public Clipboard clipboard;
+    public ClipboardContent content;
 
     @FXML
     public void initialize() {
-        generator = new Generator();
-        //passwordLengthSpinner = new Spinner<>();
-        passwordLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        passwordGenerator = new PasswordGenerator();
+        passwordOutputLabel.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        passwordLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
         setupBindings();
-    }
 
-    @FXML
-    private void setupBindings() {
-        upperCaseCheckBox.selectedProperty().bindBidirectional(generator.upperCaseFlagProperty());
-        lowerCaseCheckBox.selectedProperty().bindBidirectional(generator.lowerCaseFlagProperty());
-        numbersCheckBox.selectedProperty().bindBidirectional(generator.numbersFlagProperty());
-        specialsCheckBox.selectedProperty().bindBidirectional(generator.specialFlagProperty());
-        excludedChars.selectedProperty().bindBidirectional(generator.removeSimilarFlagProperty());
-        passwordLengthSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.equals(oldValue)) {
-                generator.getPasswordLengthProperty().setValue(newValue);
-            }
+        clipboard = Clipboard.getSystemClipboard();
+        content = new ClipboardContent();
+        passwordTextField = new TextField();
+
+        passwordOutputLabel.setOnMouseClicked(event -> {
+            content.putString(passwordOutputLabel.getText());
+            clipboard.setContent(content);
         });
     }
 
     @FXML
-    protected void onGeneratePasswordButtonClick() {
-        passwordTextField.setText(generator.generatePassword());
+    private void setupBindings() {
+        // Bind checkBoxes
+        upperCaseCheckBox.selectedProperty().bindBidirectional(passwordGenerator.upperCaseFlagProperty());
+        lowerCaseCheckBox.selectedProperty().bindBidirectional(passwordGenerator.lowerCaseFlagProperty());
+        numbersCheckBox.selectedProperty().bindBidirectional(passwordGenerator.numbersFlagProperty());
+        specialsCheckBox.selectedProperty().bindBidirectional(passwordGenerator.specialFlagProperty());
+        excludedChars.selectedProperty().bindBidirectional(passwordGenerator.removeSimilarFlagProperty());
+
+        // Add listener for password length spinner
+        passwordLengthSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(oldValue)) {
+                passwordGenerator.getPasswordLengthProperty().setValue(newValue);
+            }
+        });
+
+
     }
+
+    @FXML
+    protected void onGeneratePasswordButtonClick() {
+        passwordOutputLabel.setText(passwordGenerator.generate());
+    }
+
 
 }
