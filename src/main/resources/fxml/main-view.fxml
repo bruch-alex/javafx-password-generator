@@ -1,67 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.javafxpasswordgenerator.controllers.MainController">
-   <Label fx:id="passwordOutputLabel" minHeight="50.0" minWidth="200.0" wrapText="true">
-      <VBox.margin>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-      </VBox.margin>
-      <padding>
-         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-      </padding>
-   </Label>
-   <Separator prefWidth="200.0" />
-    <HBox alignment="CENTER">
-        <Label fx:id="passwordLabel" minWidth="100" text="Password length">
-        </Label>
-        <Spinner fx:id="passwordLengthSpinner" editable="true" maxWidth="100" />
-        <opaqueInsets>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </opaqueInsets>
-        <cursor>
-            <Cursor fx:constant="DEFAULT" />
-        </cursor>
-        <opaqueInsets>
-            <Insets />
-        </opaqueInsets>
-      <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-      </padding>
-    </HBox>
-    <GridPane>
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-         <RowConstraints />
-        </rowConstraints>
-        <opaqueInsets>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </opaqueInsets>
-        <CheckBox fx:id="numbersCheckBox" mnemonicParsing="false" text="0-9" GridPane.rowIndex="1" />
-        <CheckBox fx:id="upperCaseCheckBox" mnemonicParsing="false" text="A-Z" />
-        <CheckBox fx:id="specialsCheckBox" mnemonicParsing="false" text="!?#" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <CheckBox fx:id="lowerCaseCheckBox" mnemonicParsing="false" text="a-z" GridPane.columnIndex="1" />
-      <VBox.margin>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-      </VBox.margin>
-    </GridPane>
-   <Separator prefWidth="200.0" />
-   <Label text="Extended:" />
-     <CheckBox fx:id="excludedChars" mnemonicParsing="false" text="Remove similar characters" />
-    <Button fx:id="generatePasswordButton" onMouseClicked="#onGeneratePasswordButtonClick" text="Generate Password" />
-
-    <opaqueInsets>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-    </opaqueInsets>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
-</VBox>
+<TabPane fx:id="tabPane"
+    tabClosingPolicy="UNAVAILABLE"
+    xmlns="http://javafx.com/javafx/"
+    xmlns:fx="http://javafx.com/fxml">
+    <Tab text="Password">
+        <fx:include source="password-generator-view.fxml" />
+    </Tab>
+    <Tab text="Passphrase" disable="true">
+        <fx:include source="passphrase-generator-view.fxml" />
+    </Tab>
+    <Tab text="Username" disable="true">
+        <fx:include source="username-generator-view.fxml" />
+    </Tab>
+</TabPane>
